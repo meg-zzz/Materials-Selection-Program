@@ -1,9 +1,16 @@
 import os
 from dotenv import load_dotenv
-
 load_dotenv()
 
-api_key = os.getenv("API_KEY")
+API_KEY = os.getenv("API_KEY")
 
+from mp_api.client import MPRester
+with MPRester(API_KEY) as mpr:
 
-print(doc.model_dump().keys())
+    docs = mpr.materials.summary.search(
+        elements=["Fe", "Ni", "Cr"]
+    )
+doc = docs[0]
+
+for result in doc:
+    print(result)
