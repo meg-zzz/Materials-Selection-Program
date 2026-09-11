@@ -40,17 +40,26 @@ from setup import df
 #With a for loop
 for prop in properties:
     if (prop == 'density'):
-        user_d = (d_max >= df['density'] >= d_min)
+        df['full_density']= df['density'].notna()
+        user_d = ((d_max >= df['full_density']) & (df['full_density'] >= d_min))
     elif (prop == 'bulk_modulus'):
-        user_bm = a
+        df['full_voigtbm']= df['voight_bulk'].notna()
+        df['full_reussbm']= df['reuss_bulk'].notna()
+        df['full_vrhbm']= df['vrh_bulk'].notna()
+        user_bm = df[(df['full_voigtbm'] <= bm_max) & (df['full_reuss'] >= bm_min)]
     elif (prop == 'shear_modulus'):
-        user_sm = (sm_max >= df['shear_modulus'] >= sm_min)
+        df['full_shear'] = df['shear_modulus'].notna()
+        user_sm = ((sm_max >= df['full_shear']) & (df['full_shear'] >= sm_min))
     elif (prop == 'homogeneous_poisson'):
-          user_hp = (hp_max >= df['homogeneous_poisson'] >= hp_min)
+          df['full_hp'] = df['homogeneous_poisson'].notna()
+          user_hp = ((hp_max >= df['full_hp']) & (df['full_hp'] >= hp_min))
     elif (prop == 'band_gap'):
-         user_bg = (bg_max >= df['band_gap'] >= bg_min)
+         df['full_bg'] = df['band_gap'].notna()
+         user_bg = ((bg_max >= df['full_bg']) & (df['full_bg'] >= bg_min))
     elif (prop == 'is_magnetic'):
         if (mag == 'yes' | 'Yes'):
             user_mag = (df['is_magnetic' == 'True'])
         else:
             user_mag = (df['is_magnetic'] == 'False')
+
+print(df)

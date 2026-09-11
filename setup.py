@@ -45,7 +45,6 @@ df = pd.DataFrame(D)
 print(f'{len(df)} materials found.')
 
 #Creating new columns with the three types of bulk moduli provided by the API
-df['voigt_bm'] = df['bulk_modulus'].apply(lambda x: x['voigt'] if x is not None else None)
-df['reuss_bm'] = df['bulk_modulus'].apply(lambda x: x['reuss'] if x is not None else None)
-df['vrh_bm'] = df['bulk_modulus'].apply(lambda x: x['vrh'] if x is not None else None)
-print (df)
+df['voigt_bulk'] = df['bulk_modulus'].apply(lambda x: x['voigt'] if x is not None else None)
+df['reuss_bulk'] = df['bulk_modulus'].apply(lambda x: x['reuss'] if x is not None else None)
+df['vrh_bulk'] = df['bulk_modulus'].apply(lambda x: x['vrh'] if x is not None else None)
