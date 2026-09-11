@@ -10,7 +10,7 @@ with MPRester(API_KEY) as mpr:
 # Selecting data to retrieve from Materials Project API in materials.summary
     data = mpr.materials.summary.search(
         material_ids="mp-1047",
-        fields=["young_modulus"],
+        fields=["bulk_modulus"],
     )
 
 print(data)

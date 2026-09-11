@@ -33,7 +33,7 @@ with MPRester(API_KEY) as mpr:
 #Selecting data to retrieve from Materials Project API in materials.summary
     data = mpr.materials.summary.search(
         elements = user_elements,
-        fields = field_optns + ['material_id', 'formula_pretty', 'composition_reduced', 'is_stable']
+        fields = field_optns + ['material_id', 'formula_pretty', 'composition_reduced', 'is_stable', 'warnings']
         )
 
 #Create python dictionary
@@ -44,7 +44,8 @@ df = pd.DataFrame(D)
 
 print(f'{len(df)} materials found.')
 
-pd.set_option('display.max_columns', None)
-pd.set_option('display.max_rows', None)
-pd.set_option('display.width', None)
-print(df.head())
+#Creating new columns with the three types of bulk moduli provided by the API
+df['voigt_bm'] = df['bulk_modulus'].apply(lambda x: x['voigt'] if x is not None else None)
+df['reuss_bm'] = df['bulk_modulus'].apply(lambda x: x['reuss'] if x is not None else None)
+df['vrh_bm'] = df['bulk_modulus'].apply(lambda x: x['vrh'] if x is not None else None)
+print (df)
