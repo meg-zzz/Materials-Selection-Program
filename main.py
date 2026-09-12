@@ -41,18 +41,24 @@ from setup import df
 for prop in properties:
     if (prop == 'density'):
         user_d = ((d_max >= df['density']) & (df['density'] >= d_min))
+        df = df[user_d]
     elif (prop == 'bulk_modulus'):
         user_bm = df[(df['voigt_bulk'] <= bm_max) & (df['reuss_bulk'] >= bm_min)]
+        df = df[user_bm]
     elif (prop == 'shear_modulus'):
         user_sm = ((sm_max >= df['shear_modulus']) & (df['shear_modulus'] >= sm_min))
+        df = df[user_sm]
     elif (prop == 'homogeneous_poisson'):
           user_hp = ((hp_max >= df['homogeneous_poisson']) & (df['homogeneous_poisson'] >= hp_min))
+          df = df[user_hp]
     elif (prop == 'band_gap'):
          user_bg = ((bg_max >= df['band_gap']) & (df['band_gap'] >= bg_min))
+         df = df[user_bg]
     elif (prop == 'is_magnetic'):
         if (mag == 'yes' | 'Yes'):
             user_mag = (df['is_magnetic' == 'True'])
         else:
             user_mag = (df['is_magnetic'] == 'False')
+        df = df[user_mag]
 
 print(df)
