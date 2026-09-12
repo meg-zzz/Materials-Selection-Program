@@ -6,7 +6,8 @@ for field in field_optns:
     print(field)
 
 while True:
-    user_properties = input('Please specify the desired properties separated by commas (eg. density, band_gap): ').split(',')
+    user_properties = input('Please specify the desired properties ' \
+    'separated by commas (eg. density, band_gap): ').split(',')
     properties = [prop.strip() for prop in user_properties]
 
     if all(prop in field_optns for prop in properties):
@@ -30,7 +31,8 @@ while True:
                 mag = input('Does material need to be magnetic (Yes, No): ')
         break
     else:
-        print('Invalid properties entered, please try again. Remember to separate with commas and include underscores.')
+        print('Invalid properties entered, please try again. ' \
+        'Remember to separate with commas and include underscores.')
     
 
 #Use user input to sort through available materials
@@ -49,16 +51,28 @@ for prop in properties:
         user_sm = ((sm_max >= df['shear_modulus']) & (df['shear_modulus'] >= sm_min))
         df = df[user_sm]
     elif (prop == 'homogeneous_poisson'):
-          user_hp = ((hp_max >= df['homogeneous_poisson']) & (df['homogeneous_poisson'] >= hp_min))
+          user_hp = ((hp_max >= df['homogeneous_poisson']) & 
+                     (df['homogeneous_poisson'] >= hp_min))
           df = df[user_hp]
     elif (prop == 'band_gap'):
          user_bg = ((bg_max >= df['band_gap']) & (df['band_gap'] >= bg_min))
          df = df[user_bg]
     elif (prop == 'is_magnetic'):
-        if (mag == 'yes' | 'Yes'):
-            user_mag = (df['is_magnetic' == 'True'])
+        if (mag.lower() == 'yes'):
+            user_mag = (df['is_magnetic'] == True)
         else:
-            user_mag = (df['is_magnetic'] == 'False')
+            user_mag = (df['is_magnetic'] == False)
         df = df[user_mag]
 
-print(df)
+print(f'{len(df)} materials found.')
+
+#Ask user which property to sort results by
+while True:
+    user_sort = input ('Sort results by (One property only): ')
+    user_order = input('In ascending order? (Yes/No): ')
+    if user_sort in properties:
+        df = df.sort_values(by= user_sort,
+                            ascending = (user_order.lower() == 'yes'))
+        break
+    else:
+        print('Invalid property entered, please try again.')
