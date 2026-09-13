@@ -29,6 +29,8 @@ while True:
                 bg_max = float(input('Maximum band gap (eV): '))
             elif (prop == 'is_magnetic'):
                 mag = input('Does material need to be magnetic (Yes, No): ')
+            elif (prop == 'is_stable'):
+                stb = input('Does material need to be stable (Yes, No): ')
         break
     else:
         print('Invalid properties entered, please try again. ' \
@@ -62,7 +64,12 @@ for prop in properties:
             user_mag = (df['is_magnetic'] == True)
         else:
             user_mag = (df['is_magnetic'] == False)
-        df = df[user_mag]
+    elif (prop == 'is_stable'):
+        if (stb.lower() == 'yes'):
+            user_stb = (df['is_stable'] == True)
+        else:
+            user_stb = (df['is_stable'] == False)
+        df = df[user_stb]
 
 print(f'{len(df)} materials found.')
 
@@ -76,3 +83,17 @@ while True:
         break
     else:
         print('Invalid property entered, please try again.')
+
+
+#Print results
+
+pd.set_option('display.max_columns', None)
+
+while True:
+    display_rows = int(input('How many rows of the results would you like to see? '))
+    if (display_rows <= len(df)) & (display_rows > 0):
+        print(df.head(display_rows))
+        break
+    else:
+        print ('Too many/few rows requested, please try again.')
+

@@ -17,14 +17,16 @@ while True:
     if all(element in element_optns for element in user_elements):
         break
     else:
-        print('Invalid element entered, please try again. Remember to separate with commas and to capitalise first letter.')
+        print('Invalid element entered, please try again. ' \
+        'Remember to separate with commas and capialise first letter.')
 
 field_optns = ['density',
             'bulk_modulus',
             'shear_modulus',
             'homogeneous_poisson',
             'band_gap',
-            'is_magnetic']
+            'is_magnetic',
+            'is_stable']
 
 #Importing Materials Project API
 from mp_api.client import MPRester
