@@ -35,7 +35,8 @@ with MPRester(API_KEY) as mpr:
 #Selecting data to retrieve from Materials Project API in materials.summary
     data = mpr.materials.summary.search(
         elements = user_elements,
-        fields = field_optns + ['material_id', 'formula_pretty', 'composition_reduced', 'is_stable', 'warnings']
+        fields = field_optns + ['material_id', 'formula_pretty', 
+                                'composition_reduced', 'warnings']
         )
 
 #Create python dictionary
@@ -44,9 +45,15 @@ D = [mat.dict() for mat in data]
 #Create a pandas data frame with data from the dictionary
 df = pd.DataFrame(D)
 
+
 print(f'{len(df)} materials found.')
 
 #Creating new columns with the three types of bulk moduli provided by the API
 df['voigt_bulk'] = df['bulk_modulus'].apply(lambda x: x['voigt'] if x is not None else None)
 df['reuss_bulk'] = df['bulk_modulus'].apply(lambda x: x['reuss'] if x is not None else None)
 df['vrh_bulk'] = df['bulk_modulus'].apply(lambda x: x['vrh'] if x is not None else None)
+
+#Creating new columns with the three types of shear moduli provided by the API
+df['voigt_shear'] = df['shear_modulus'].apply(lambda x: x['voigt'] if x is not None else None)
+df['reuss_shear'] = df['shear_modulus'].apply(lambda x: x['reuss'] if x is not None else None)
+df['vrh_shear'] = df['shear_modulus'].apply(lambda x: x['vrh'] if x is not None else None)

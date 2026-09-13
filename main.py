@@ -47,10 +47,10 @@ for prop in properties:
         user_d = ((d_max >= df['density']) & (df['density'] >= d_min))
         df = df[user_d]
     elif (prop == 'bulk_modulus'):
-        user_bm = df[(df['voigt_bulk'] <= bm_max) & (df['reuss_bulk'] >= bm_min)]
+        user_bm = ((df['voigt_bulk'] <= bm_max) & (df['reuss_bulk'] >= bm_min))
         df = df[user_bm]
     elif (prop == 'shear_modulus'):
-        user_sm = ((sm_max >= df['shear_modulus']) & (df['shear_modulus'] >= sm_min))
+        user_sm = ((sm_max >= df['voigt_shear']) & (df['reuss_shear'] >= sm_min))
         df = df[user_sm]
     elif (prop == 'homogeneous_poisson'):
           user_hp = ((hp_max >= df['homogeneous_poisson']) & 
@@ -73,21 +73,38 @@ for prop in properties:
 
 print(f'{len(df)} materials found.')
 
+#Exclude shear and bulk moduli from properties for next step
+
+sort_properties = [prop for prop in properties if prop not in 
+                   ['shear_modulus', 'bulk_modulus']]
+
 #Ask user which property to sort results by
 while True:
     user_sort = input ('Sort results by (One property only): ')
     user_order = input('In ascending order? (Yes/No): ')
-    if user_sort in properties:
+    if user_sort in sort_properties:
         df = df.sort_values(by= user_sort,
                             ascending = (user_order.lower() == 'yes'))
-        break
+    elif (user_sort == 'bulk_modulus') & (user_order.lower() == 'yes'):
+        df = df.sort_values(by = 'reuss_bulk')
+    elif (user_sort == 'bulk_modulus') & (user_order.lower() == 'no'):
+        df = df.sort_values(by = 'voigt_bulk', ascending = False)
+    elif (user_sort == 'shear_modulus') & (user_order.lower() == 'yes'):
+        df = df.sort_values(by = 'reuss_shear')
+    elif (user_sort == 'shear_modulus') & (user_order.lower() == 'no'):
+        df = df.sort_values(by = 'voigt_shear', ascending = False)
     else:
         print('Invalid property entered, please try again.')
-
+        continue
+    break
 
 #Print results
-
 pd.set_option('display.max_columns', None)
+
+df = df[['material_id', 'formula_pretty', 'composition_reduced', 'is_stable', 
+          'density', 'voigt_bulk', 'reuss_bulk', 'vrh_bulk', 'voigt_shear', 
+          'reuss_shear', 'vrh_shear', 'homogeneous_poisson', 'band_gap', 
+          'is_magnetic', 'warnings']]
 
 while True:
     display_rows = int(input('How many rows of the results would you like to see? '))
