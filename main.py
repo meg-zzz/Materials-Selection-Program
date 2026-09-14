@@ -75,23 +75,23 @@ print(f'{len(df)} materials found.')
 
 #Exclude shear and bulk moduli from properties for next step
 
-sort_properties = [prop for prop in properties if prop not in 
+sort_properties = [prop for prop in field_optns if prop not in 
                    ['shear_modulus', 'bulk_modulus']]
 
 #Ask user which property to sort results by
 while True:
-    user_sort = input ('Sort results by (One property only): ')
-    user_order = input('In ascending order? (Yes/No): ')
+    user_sort = input ('Sort results by (One property only): ').strip().lower()
+    user_order = input('In ascending order? (Yes/No): ').strip().lower()
     if user_sort in sort_properties:
         df = df.sort_values(by= user_sort,
-                            ascending = (user_order.lower() == 'yes'))
-    elif (user_sort == 'bulk_modulus') & (user_order.lower() == 'yes'):
+                            ascending = (user_order == 'yes'))
+    elif (user_sort == 'bulk_modulus') & (user_order == 'yes'):
         df = df.sort_values(by = 'reuss_bulk')
-    elif (user_sort == 'bulk_modulus') & (user_order.lower() == 'no'):
+    elif (user_sort == 'bulk_modulus') & (user_order == 'no'):
         df = df.sort_values(by = 'voigt_bulk', ascending = False)
-    elif (user_sort == 'shear_modulus') & (user_order.lower() == 'yes'):
+    elif (user_sort == 'shear_modulus') & (user_order == 'yes'):
         df = df.sort_values(by = 'reuss_shear')
-    elif (user_sort == 'shear_modulus') & (user_order.lower() == 'no'):
+    elif (user_sort == 'shear_modulus') & (user_order == 'no'):
         df = df.sort_values(by = 'voigt_shear', ascending = False)
     else:
         print('Invalid property entered, please try again.')
