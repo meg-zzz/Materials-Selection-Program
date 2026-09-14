@@ -1,10 +1,13 @@
+#Import field_optns from setup field to work with
 from setup import field_optns
 
+#Print list of available properties for user to sort through
 print ('Available properties are:')
-
 for field in field_optns:
     print(field)
 
+#While loop with nestled for loop to allow user to select and specify 
+#required properties
 while True:
     user_properties = input('Please specify the desired properties ' \
     'separated by commas (eg. density, band_gap): ').split(',')
@@ -37,11 +40,11 @@ while True:
         'Remember to separate with commas and include underscores.')
     
 
-#Use user input to sort through available materials
+#Import pandas and df dataframe from setup file to sort through and display results
 import pandas as pd
 from setup import df
 
-#With a for loop
+#Sort through available materials with user input and a for loop
 for prop in properties:
     if (prop == 'density'):
         user_d = ((d_max >= df['density']) & (df['density'] >= d_min))
@@ -74,7 +77,6 @@ for prop in properties:
 print(f'{len(df)} materials found.')
 
 #Exclude shear and bulk moduli from properties for next step
-
 sort_properties = [prop for prop in field_optns if prop not in 
                    ['shear_modulus', 'bulk_modulus']]
 
@@ -107,7 +109,7 @@ df = df[['material_id', 'formula_pretty', 'composition_reduced', 'is_stable',
           'is_magnetic', 'warnings']]
 
 while True:
-    display_rows = int(input('How many rows of the results would you like to see? '))
+    display_rows = int(input('How many rows would you like to see? '))
     if (display_rows <= len(df)) & (display_rows > 0):
         print(df.head(display_rows))
         break
